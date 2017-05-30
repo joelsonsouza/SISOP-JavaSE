@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TemplateMovFinanceiras" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ecc8b2e6-111d-40e8-bbc5-5e537271ef71">
+	<property name="ireport.zoom" value="1.0000000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="85"/>
+	<queryString>
+		<![CDATA[SELECT
+     a."ano",
+     a."mes",
+     b."periodo",
+     b."descricaotipo",
+     a."detalhamento",
+     a."valor"
+FROM
+     "tbl_regmov" a INNER JOIN "tbl_roots" b ON a."id_tipo" = b."id_tipo"
+WHERE
+     a.tipo = 'GASTO'
+     and a.ano = '2017'
+order by periodo]]>
+	</queryString>
+	<field name="ano" class="java.lang.Integer"/>
+	<field name="mes" class="java.lang.String"/>
+	<field name="periodo" class="java.lang.String"/>
+	<field name="descricaotipo" class="java.lang.String"/>
+	<field name="detalhamento" class="java.lang.String"/>
+	<field name="valor" class="java.lang.Double"/>
+	<variable name="tipo" class="java.math.BigDecimal" resetType="Group" resetGroup="periodo" incrementType="Group" incrementGroup="ano" calculation="Sum">
+		<variableExpression><![CDATA[$V{tipo}.add( $F{valor})]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<variable name="mes" class="java.math.BigDecimal" resetType="Group" resetGroup="mes" incrementType="Group" incrementGroup="ano" calculation="Sum">
+		<variableExpression><![CDATA[$V{mes}.add( $F{valor})]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalgeral" class="java.math.BigDecimal" resetType="Group" resetGroup="ano" incrementType="Group" incrementGroup="ano" calculation="Sum">
+		<variableExpression><![CDATA[$V{totalgeral}.add( $F{valor})]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<group name="ano">
+		<groupExpression><![CDATA[$F{ano}]]></groupExpression>
+		<groupHeader>
+			<band height="24">
+				<staticText>
+					<reportElement x="244" y="3" width="28" height="17" uuid="ef1a7e4f-fbca-443d-b733-5e9e3a15f3dc"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[ANO:]]></text>
+				</staticText>
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="272" y="3" width="114" height="18" uuid="ec03a085-7937-4191-9e6b-48b716b5a9db"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ano}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="mes" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{mes}]]></groupExpression>
+		<groupHeader>
+			<band height="23">
+				<textField>
+					<reportElement isPrintRepeatedValues="false" mode="Opaque" x="0" y="0" width="555" height="23" forecolor="#FF0000" backcolor="#CCCCCC" uuid="811843e7-05f4-4fa8-afaf-380d5beab330"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{mes}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="23">
+				<staticText>
+					<reportElement x="2" y="3" width="120" height="20" uuid="0457c8fe-9d2a-4393-86e3-7275f53d9758"/>
+					<text><![CDATA[Total de gastos no mês:]]></text>
+				</staticText>
+				<line>
+					<reportElement x="1" y="0" width="553" height="1" uuid="1cd29e8a-0bea-455f-8ad0-ade4d1bccf96"/>
+				</line>
+				<line>
+					<reportElement x="2" y="22" width="553" height="1" uuid="f533c40a-5db8-4794-a6db-1e1e66808f81"/>
+				</line>
+				<textField pattern="R$ #,##0.00">
+					<reportElement x="453" y="0" width="99" height="20" uuid="8aa575a2-51ca-41f8-9cba-fc89d3aa1cd9"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{mes}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="periodo">
+		<groupExpression><![CDATA[$F{periodo}]]></groupExpression>
+		<groupHeader>
+			<band height="41">
+				<textField>
+					<reportElement x="46" y="0" width="110" height="23" forecolor="#0000CC" uuid="a7827cbf-508f-4652-a9ca-eb07590c7c35"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{periodo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="1" y="0" width="45" height="23" forecolor="#0000CC" uuid="8edcaa79-857d-408c-81cc-77ab46e1b5da"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[GASTO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="213" y="23" width="265" height="18" backcolor="#CCCCCC" uuid="399cb505-e6d2-413c-bd39-c0132fbc29e5"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="15" isBold="true"/>
+						<paragraph lineSpacing="Proportional" lineSpacingSize="2.0"/>
+					</textElement>
+					<text><![CDATA[DETALHAMENTO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="479" y="23" width="74" height="18" backcolor="#CCCCCC" uuid="4eb22d33-bece-4e7d-8b14-4a85c0734ff0"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" size="15" isBold="true"/>
+					</textElement>
+					<text><![CDATA[VALOR]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="-1" y="23" width="214" height="18" backcolor="#CCCCCC" uuid="e1b56663-40f4-40d2-848c-cd8c9f46b7aa"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="15" isBold="true"/>
+						<paragraph lineSpacing="Proportional" lineSpacingSize="2.0"/>
+					</textElement>
+					<text><![CDATA[TIPO]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="36">
+				<staticText>
+					<reportElement x="2" y="12" width="100" height="20" uuid="de5eaa31-ec4f-4452-9cf2-67e8e010e746"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Total:]]></text>
+				</staticText>
+				<line>
+					<reportElement x="2" y="31" width="553" height="1" uuid="13c10ef6-0b3c-4485-ab55-e5b1f1877f8e"/>
+				</line>
+				<line>
+					<reportElement x="1" y="12" width="553" height="1" uuid="61d9fc7c-42fa-4ca9-a453-b53c3702fedc"/>
+				</line>
+				<textField pattern="R$ #,##0.00">
+					<reportElement x="478" y="14" width="75" height="20" uuid="dea6286f-5426-4f71-8565-34b0f7c777c2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tipo}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="142" splitType="Stretch">
+			<image>
+				<reportElement x="244" y="0" width="101" height="79" uuid="67d83cf1-02b2-4cc6-88f0-b570c6cbe544"/>
+				<imageExpression><![CDATA["D:\\Users\\joels\\Documents\\NetBeansProjects\\SinFam_1\\iReport\\Imagens\\jlcolombo-721bd6e9.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="114" width="555" height="28" backcolor="#CCCCCC" uuid="dc3f26e3-c512-4b0b-b759-611f374d37d0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="16" isBold="false"/>
+				</textElement>
+				<text><![CDATA[RELATÓRIO GASTOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="94" width="100" height="20" uuid="a56e48d5-0c9a-4c74-a6db-caa2bc1c3b1f"/>
+				<text><![CDATA[Campo Grande, MS ]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="100" y="94" width="144" height="20" uuid="2e0b723b-38c7-43dc-b938-84dcc3a0ccc3"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="402" y="94" width="153" height="20" uuid="92c44de2-8b57-4d9b-8671-deb129c563b5"/>
+				<text><![CDATA[Sistema de Orçamento Pessoal]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField pattern="R$ #,##0.00">
+				<reportElement x="479" y="0" width="73" height="15" uuid="86bf905f-b80c-43b9-8856-130bae723b0d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="213" y="0" width="263" height="15" uuid="3bcba51a-5cd6-41aa-8508-fb1d8b94493f"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{detalhamento}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Band">
+				<reportElement x="2" y="0" width="211" height="15" uuid="59a22218-644d-4b38-b1f0-2670668387db"/>
+				<textFieldExpression><![CDATA[$F{descricaotipo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="102" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="2" y="47" width="432" height="26" backcolor="#CCCCCC" uuid="a4472204-1387-4417-b3bd-124706956fc0"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Geral]]></text>
+			</staticText>
+			<line>
+				<reportElement x="2" y="47" width="553" height="1" uuid="e16e87f1-75cc-4c1f-b109-21e26db768ef"/>
+			</line>
+			<line>
+				<reportElement x="-1" y="72" width="558" height="1" uuid="d4ab76a6-7579-42f2-a421-b19b5deb66dd"/>
+			</line>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="467" y="81" width="47" height="20" forecolor="#CCCCCC" uuid="06c6d57f-50e2-460c-afbf-cad6a1907330"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="h.mm a">
+				<reportElement x="514" y="81" width="43" height="20" forecolor="#CCCCCC" uuid="9c521bb7-50f9-4733-bdfa-396732869009"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="418" y="81" width="49" height="20" forecolor="#CCCCCC" uuid="af103e69-f783-4c38-abc9-af86d8ee5771"/>
+				<text><![CDATA[Emitido em:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="166" y="81" width="249" height="20" forecolor="#CCCCCC" uuid="bea11189-9cdb-40e0-bc44-6cb54afb04d2"/>
+				<text><![CDATA[Todos direitos reservados a JL Desenvolper©]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="81" width="145" height="20" forecolor="#CCCCCC" uuid="75eb3ad9-1b75-4a46-9e35-9c4640810bc3"/>
+				<text><![CDATA[RelMovFinanceirasPorAno]]></text>
+			</staticText>
+			<textField pattern="R$ #,##0.00">
+				<reportElement mode="Opaque" x="434" y="48" width="120" height="24" backcolor="#CCCCCC" uuid="4d94f550-9d7b-4c2f-8c30-4bba072410d4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalgeral}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
